@@ -144,7 +144,7 @@ body { font-family: 'Nunito', sans-serif; overflow: hidden; }
 /* ===== TITLE SIGN ===== */
 .title-sign {
   position: absolute;
-  bottom: 28%;
+  top: 10px;
   left: 50%;
   transform: translateX(-50%);
   z-index: 20;

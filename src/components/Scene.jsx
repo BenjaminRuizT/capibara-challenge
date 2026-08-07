@@ -28,6 +28,12 @@ const CAPYBARA_POSITIONS = [
   { id: 'daniel',   name: 'Daniel',   color: '#5BB85B', left: '77%', top: '32%' },
 ]
 
+const PHOTOS = {
+  benjamin: '/benja.png',
+  david:    '/david.png',
+  daniel:   '/dany.png',
+}
+
 const CLOUDS = [
   { id: 1, top: '6%',  width: 110, dur: 30, delay: 0,   op: 0.82 },
   { id: 2, top: '12%', width: 80,  dur: 42, delay: -14, op: 0.70 },
@@ -53,6 +59,26 @@ const STARS = Array.from({ length: 50 }, (_, i) => ({
   dur:  1.5 + Math.random() * 2,
   del:  Math.random() * 3,
 }))
+
+/* ─── Avatar with photo ──────────────────────────────────── */
+function Avatar({ id, avatar, color, size = 32, border = false }) {
+  const photo = PHOTOS[id]
+  return (
+    <div style={{
+      width: size, height: size, borderRadius: '50%',
+      background: color, flexShrink: 0, overflow: 'hidden',
+      boxShadow: `0 2px 6px rgba(0,0,0,0.5)`,
+      border: border ? `2px solid rgba(255,255,255,0.4)` : 'none',
+      display: 'flex', alignItems: 'center', justifyContent: 'center',
+      fontSize: size * 0.55,
+    }}>
+      {photo
+        ? <img src={photo} alt={id} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+        : avatar ?? id[0].toUpperCase()
+      }
+    </div>
+  )
+}
 
 /* ─── Sub-components ─────────────────────────────────────── */
 function Cloud({ top, width, dur, delay, op }) {
@@ -118,9 +144,7 @@ function CapybaraBadge({ participant, currentWeight, initialWeight, activityText
   return (
     <div className={`capybara-badge ${show ? 'badge-visible' : 'badge-hidden'}`}
       style={{ '--accent': participant.color }}>
-      <div className="badge-avatar" style={{ background: participant.color }}>
-        {participant.avatar ?? participant.name[0]}
-      </div>
+      <Avatar id={participant.id} avatar={participant.avatar} color={participant.color} size={40} border />
       <div className="badge-name" style={{ color: participant.color }}>{participant.name}</div>
       <div className="badge-activity">{activityText}</div>
       <div className="badge-weight">
@@ -373,7 +397,7 @@ export default function Scene({ participants, currentWeek, onTitleClick, onAdmin
           <text x="160" y="60" textAnchor="middle" fontFamily="Fredoka One, cursive"
             fontSize="26" fill="#FFE566"
             style={{ filter: 'drop-shadow(1px 1px 3px rgba(0,0,0,0.9))' }}>
-            CHALLENGE 🦦
+            CHALLENGE
           </text>
         </svg>
         <div style={{ textAlign: 'center', fontSize: 10, color: 'rgba(255,255,255,0.45)', marginTop: 2 }}>
@@ -393,9 +417,7 @@ export default function Scene({ participants, currentWeek, onTitleClick, onAdmin
             return (
               <div key={p.id} className={`participant-card rank-${i + 1}`}>
                 <div className="card-header">
-                  <div className="card-avatar" style={{ background: p.color }}>
-                    {p.avatar ?? p.name[0]}
-                  </div>
+                  <Avatar id={p.id} avatar={p.avatar} color={p.color} size={34} border />
                   <span className="card-name">{p.name}</span>
                   <span className="card-rank">{medals[i]}</span>
                   <div style={{ marginLeft: 'auto', textAlign: 'right' }}>
