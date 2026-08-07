@@ -369,28 +369,53 @@ export default function Scene({ participants, currentWeek, onTitleClick, onRanki
                 <div className="card-progress-fill"
                   style={{ width: `${progress}%`, background: `linear-gradient(90deg, ${p.color}, #5EFF99)` }} />
               </div>
-              {/* Weekly mini chart */}
+              {/* Weekly trend chart */}
               {p.entries?.length > 0 && (
                 <div className="card-weekly-chart">
                   {Array.from({ length: 10 }, (_, week) => {
-                    const entry = p.entries.find(e => e.week === week)
-                    const lostW = entry ? Math.max(p.initialWeight - entry.weight, 0) : null
-                    const barH  = lostW !== null ? Math.min((lostW / (p.initialWeight * 0.1)) * 28, 28) : 0
-                    const isCurrent = entry && week === p.entries[p.entries.length - 1].week
+                    const entry    = p.entries.find(e => e.week === week)
+                    const prevEntry = p.entries.find(e => e.week === week - 1)
+                    const isLast   = entry && week === p.entries[p.entries.length - 1].week
+                    let delta = null
+                    let barColor = 'rgba(255,255,255,0.15)'
+                    let barH = 2
+                    let isGain = false
+
+                    if (entry) {
+                      if (prevEntry) {
+                        delta = prevEntry.weight - entry.weight
+                        isGain = delta < 0
+                        const absD = Math.abs(delta)
+                        barH = Math.min(absD * 6, 28)
+                        barColor = isGain ? '#FF5B5B' : '#5EFF99'
+                      } else {
+                        barH = 4
+                        barColor = 'rgba(255,255,255,0.3)'
+                      }
+                    }
+
                     return (
-                      <div key={week} className="chart-bar-col">
-                        <div className="chart-bar-wrap">
-                          {entry ? (
-                            <div className="chart-bar" style={{
-                              height: Math.max(barH, 2),
-                              background: isCurrent ? p.color : `${p.color}77`,
-                              boxShadow: isCurrent ? `0 0 5px ${p.color}` : 'none',
-                            }} />
-                          ) : (
-                            <div className="chart-bar-empty" />
+                      <div key={week} className="chart-bar-col" title={
+                        entry ? (delta !== null ? `S${week}: ${delta > 0 ? '▼' : '▲'} ${Math.abs(delta).toFixed(1)} kg` : `S${week}: inicio`) : `S${week}: sin dato`
+                      }>
+                        <div className="chart-delta-label">
+                          {delta !== null && Math.abs(delta) >= 0.1 && (
+                            <span style={{ color: isGain ? '#FF5B5B' : '#5EFF99', fontSize: 7 }}>
+                              {isGain ? '▲' : '▼'}{Math.abs(delta).toFixed(1)}
+                            </span>
                           )}
                         </div>
-                        <div className="chart-label">{week}</div>
+                        <div className="chart-bar-wrap">
+                          <div className="chart-bar" style={{
+                            height: Math.max(barH, 2),
+                            background: barColor,
+                            boxShadow: isLast ? `0 0 5px ${barColor}` : 'none',
+                            opacity: entry ? 1 : 0.25,
+                          }} />
+                        </div>
+                        <div className="chart-label" style={{ color: isLast ? '#FFE566' : undefined }}>
+                          {week}
+                        </div>
                       </div>
                     )
                   })}
