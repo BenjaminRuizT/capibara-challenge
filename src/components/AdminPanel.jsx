@@ -1,13 +1,25 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+
+const CHALLENGE_START = '2026-07-20'
+
+function weekToDate(week) {
+  const d = new Date(CHALLENGE_START)
+  d.setDate(d.getDate() + parseInt(week) * 7)
+  return d.toISOString().slice(0, 10)
+}
 
 export default function AdminPanel({ participants, currentWeek, onSaved, onClose }) {
   const [password, setPassword] = useState('')
   const [participantId, setParticipantId] = useState(participants[0]?.id || 'david')
   const [week, setWeek] = useState(currentWeek)
   const [weight, setWeight] = useState('')
-  const [date, setDate] = useState(new Date().toISOString().slice(0, 10))
+  const [date, setDate] = useState(weekToDate(currentWeek))
   const [msg, setMsg] = useState(null)
   const [loading, setLoading] = useState(false)
+
+  useEffect(() => {
+    setDate(weekToDate(week))
+  }, [week])
 
   const handleSave = async (e) => {
     e.preventDefault()
