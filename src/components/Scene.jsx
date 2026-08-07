@@ -169,7 +169,7 @@ function Moon() {
 
 /* ─── Weekly Weight Chart (SVG line chart) ────────────────── */
 function WeightLineChart({ entries, initialWeight, goalWeight, color }) {
-  const W = 310, H = 88
+  const W = 340, H = 100
   const PAD = { t: 18, b: 16, l: 6, r: 6 }
   const cW = W - PAD.l - PAD.r
   const cH = H - PAD.t - PAD.b
@@ -357,29 +357,10 @@ export default function Scene({ participants, currentWeek, onTitleClick, onAdmin
         {LEAVES.map(l => <Leaf key={l.id} {...l} />)}
       </div>
 
-      {/* Capybara badges */}
-      {CAPYBARA_POSITIONS.map(pos => {
-        const participant = participants.find(p => p.id === pos.id)
-        if (!participant) return null
-        return (
-          <div key={pos.id} style={{
-            position: 'absolute', left: pos.left, top: pos.top,
-            transform: 'translate(-50%, -100%)', zIndex: 12,
-          }}>
-            <CapybaraBadge
-              participant={{ ...pos, avatar: participant.avatar }}
-              currentWeight={getLatestWeight(participant)}
-              initialWeight={participant.initialWeight}
-              activityText={getActivity(pos.id)}
-              show={badgeVisible}
-            />
-          </div>
-        )
-      })}
 
       {/* Title sign */}
       <div className="title-sign" onClick={onTitleClick} style={{ zIndex: 18 }}>
-        <svg width="320" height="80" viewBox="0 0 320 80">
+        <svg width="500" height="124" viewBox="0 0 320 80">
           <rect x="8" y="8" width="304" height="64" fill="#5a2e0a" rx="6" />
           <rect x="4" y="4" width="312" height="68" fill="#7B4520" rx="8" />
           {[16, 30, 44, 56].map(y => (
@@ -400,7 +381,7 @@ export default function Scene({ participants, currentWeek, onTitleClick, onAdmin
             CHALLENGE
           </text>
         </svg>
-        <div style={{ textAlign: 'center', fontSize: 10, color: 'rgba(255,255,255,0.45)', marginTop: 2 }}>
+        <div style={{ textAlign: 'center', fontSize: 12, color: 'rgba(255,255,255,0.5)', marginTop: 2 }}>
           Semana {currentWeek} / 9
         </div>
       </div>
@@ -416,17 +397,22 @@ export default function Scene({ participants, currentWeek, onTitleClick, onAdmin
             const progress = Math.min((pct / 10) * 100, 100)
             return (
               <div key={p.id} className={`participant-card rank-${i + 1}`}>
+                {/* Avatar flotante centrado encima del cuadro */}
+                <div className="card-avatar-float">
+                  <Avatar id={p.id} avatar={p.avatar} color={p.color} size={164} border />
+                </div>
                 <div className="card-header">
-                  <Avatar id={p.id} avatar={p.avatar} color={p.color} size={60} border />
-                  <span className="card-name">{p.name}</span>
-                  <span className="card-rank">{medals[i]}</span>
-                  <div style={{ marginLeft: 'auto', textAlign: 'right' }}>
-                    <div style={{ display: 'flex', alignItems: 'baseline', gap: 3, justifyContent: 'flex-end' }}>
+                  <div style={{ flex: 1, textAlign: 'center' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
+                      <span className="card-name">{p.name}</span>
+                      <span className="card-rank">{medals[i]}</span>
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'baseline', gap: 4, justifyContent: 'center', marginTop: 2 }}>
                       <span className="card-current-weight">{latest}</span>
                       <span className="card-weight-unit">kg</span>
-                    </div>
-                    <div className="card-lost">
-                      {lost > 0 ? `▼ ${lost} kg (${pct}%)` : '🏁 Inicio'}
+                      <span className="card-lost">
+                        {lost > 0 ? `▼ ${lost} kg (${pct}%)` : '🏁 Inicio'}
+                      </span>
                     </div>
                   </div>
                 </div>

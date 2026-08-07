@@ -177,47 +177,61 @@ body { font-family: 'Nunito', sans-serif; overflow: hidden; }
 }
 .cards-inner {
   display: flex;
-  gap: 16px;
+  gap: 20px;
   justify-content: center;
   align-items: flex-end;
+  padding-top: 90px; /* espacio para el avatar flotante */
 }
 
 .participant-card {
   flex: 1;
-  max-width: 360px;
-  background: rgba(4, 22, 60, 0.82);
-  border: 1px solid rgba(100, 180, 255, 0.30);
-  border-radius: 18px;
-  padding: 14px 16px 12px;
+  max-width: 400px;
+  position: relative;
+  overflow: visible;
+  background: rgba(4, 22, 60, 0.86);
+  border: 2px solid rgba(100, 180, 255, 0.32);
+  border-radius: 22px;
+  padding: 18px 20px 16px;
+  margin-top: 82px; /* espacio para avatar que sobresale */
   color: white;
   transition: transform 0.2s, box-shadow 0.2s;
-  backdrop-filter: blur(14px);
-  box-shadow: 0 8px 32px rgba(0,0,0,0.55);
+  backdrop-filter: blur(16px);
+  box-shadow: 0 10px 36px rgba(0,0,0,0.60);
 }
-.participant-card:hover { transform: translateY(-3px); box-shadow: 0 12px 36px rgba(0,0,0,0.65); }
-.participant-card.rank-1 { border-color: rgba(255,215,0,0.65); box-shadow: 0 0 18px rgba(255,215,0,0.25), 0 8px 32px rgba(0,0,0,0.55); }
-.participant-card.rank-2 { border-color: rgba(192,192,192,0.55); }
-.participant-card.rank-3 { border-color: rgba(205,127,50,0.55); }
+.participant-card:hover { transform: translateY(-4px); box-shadow: 0 16px 44px rgba(0,0,0,0.70); }
+.participant-card.rank-1 { border-color: rgba(255,215,0,0.70); box-shadow: 0 0 24px rgba(255,215,0,0.30), 0 10px 36px rgba(0,0,0,0.60); }
+.participant-card.rank-2 { border-color: rgba(192,192,192,0.60); }
+.participant-card.rank-3 { border-color: rgba(205,127,50,0.60); }
 
-.card-header { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
-.card-name { font-family: 'Fredoka One', cursive; font-size: 20px; letter-spacing: 0.3px; }
-.card-rank { font-size: 22px; }
-.card-current-weight { font-family: 'Fredoka One', cursive; font-size: 22px; color: #FFE566; }
-.card-weight-unit { font-size: 13px; opacity: 0.65; }
+/* Avatar flotante centrado sobre el cuadro */
+.card-avatar-float {
+  position: absolute;
+  top: -82px;
+  left: 50%;
+  transform: translateX(-50%);
+  filter: drop-shadow(0 6px 16px rgba(0,0,0,0.6));
+  z-index: 2;
+}
+
+.card-header { display: flex; align-items: center; justify-content: center; margin-bottom: 12px; }
+.card-name { font-family: 'Fredoka One', cursive; font-size: 26px; letter-spacing: 0.4px; }
+.card-rank { font-size: 28px; }
+.card-current-weight { font-family: 'Fredoka One', cursive; font-size: 30px; color: #FFE566; }
+.card-weight-unit { font-size: 16px; opacity: 0.65; }
 .card-lost {
-  font-size: 12px; font-weight: 800; color: #5EFF99;
+  font-size: 15px; font-weight: 800; color: #5EFF99; margin-left: 4px;
 }
 .card-progress-label {
-  font-size: 11px; opacity: 0.70; margin-bottom: 5px;
+  font-size: 13px; opacity: 0.72; margin-bottom: 6px;
   display: flex; justify-content: space-between;
 }
-.card-progress-bar { height: 8px; background: rgba(255,255,255,0.12); border-radius: 4px; overflow: hidden; }
-.card-progress-fill { height: 100%; border-radius: 4px; transition: width 1.2s ease; }
+.card-progress-bar { height: 10px; background: rgba(255,255,255,0.12); border-radius: 5px; overflow: hidden; }
+.card-progress-fill { height: 100%; border-radius: 5px; transition: width 1.2s ease; }
 
 .card-chart-wrap {
-  margin-top: 10px;
-  padding-top: 6px;
-  border-top: 1px solid rgba(255,255,255,0.08);
+  margin-top: 12px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(255,255,255,0.09);
 }
 
 /* ===== TOP BUTTONS ===== */
