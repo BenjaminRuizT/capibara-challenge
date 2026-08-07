@@ -137,6 +137,9 @@ function CapybaraBadge({ participant, currentWeight, initialWeight, activityText
   return (
     <div className={`capybara-badge ${show ? 'badge-visible' : 'badge-hidden'}`}
       style={{ '--accent': participant.color }}>
+      <div className="badge-avatar" style={{ background: participant.color }}>
+        {participant.avatar ?? participant.name[0]}
+      </div>
       <div className="badge-name" style={{ color: participant.color }}>
         {participant.name}
       </div>
@@ -165,7 +168,7 @@ function Moon() {
 }
 
 /* ─── Main Scene ──────────────────────────────────────────── */
-export default function Scene({ participants, currentWeek, onTitleClick, onRankingsToggle }) {
+export default function Scene({ participants, currentWeek, onTitleClick, onRankingsToggle, onAdminToggle }) {
   const [timeOfDay, setTimeOfDay]   = useState(getTimeOfDay)
   const [activityIdx, setActivityIdx] = useState(0)
   const [badgeVisible, setBadgeVisible] = useState(true)
@@ -343,7 +346,9 @@ export default function Scene({ participants, currentWeek, onTitleClick, onRanki
           return (
             <div key={p.id} className={`participant-card rank-${i + 1}`}>
               <div className="card-header">
-                <div className="card-avatar-dot" style={{ background: p.color }} />
+                <div className="card-avatar" style={{ background: p.color }}>
+                  {p.avatar ?? p.name[0]}
+                </div>
                 <span className="card-name">{p.name}</span>
                 <span className="card-rank">{medals[i]}</span>
               </div>
@@ -370,7 +375,10 @@ export default function Scene({ participants, currentWeek, onTitleClick, onRanki
       </div>
 
       {/* ── Top Buttons ────────────────────────────────── */}
-      <button className="rankings-btn" onClick={onRankingsToggle}>🏆 Ranking</button>
+      <div style={{ position: 'absolute', top: 14, left: 18, zIndex: 25, display: 'flex', flexDirection: 'column', gap: 8 }}>
+        <button className="rankings-btn" onClick={onRankingsToggle}>🏆 Ranking</button>
+        <button className="register-btn" onClick={onAdminToggle}>✏️ Registrar Peso</button>
+      </div>
       <div className="week-counter">📅 Semana {currentWeek} · {9 - currentWeek} sem restantes</div>
     </div>
   )

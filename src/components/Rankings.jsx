@@ -57,8 +57,16 @@ export default function Rankings({ participants, challenge, currentWeek, onClose
             <div key={p.id} className="ranking-row">
               <div className="rank-medal">{medals[i]}</div>
               <div className="rank-info">
-                <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                  <div style={{ width: 10, height: 10, borderRadius: '50%', background: p.color }} />
+                <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                  <div style={{
+                    width: 36, height: 36, borderRadius: '50%',
+                    background: p.color,
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    fontSize: 20, flexShrink: 0,
+                    boxShadow: '0 2px 6px rgba(0,0,0,0.4)',
+                  }}>
+                    {p.avatar ?? p.name[0]}
+                  </div>
                   <span className="rank-name">{p.name}</span>
                 </div>
                 <div className="rank-stats">

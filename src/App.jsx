@@ -6,9 +6,9 @@ import AdminPanel from './components/AdminPanel'
 const INITIAL_DATA = {
   challenge: { name: "Capibara's Challenge", startDate: '2026-07-20', endDate: '2026-09-20', goalPercent: 10, totalWeeks: 9 },
   participants: [
-    { id: 'david', name: 'David', color: '#D4724A', initialWeight: 147.5, goalWeight: 132.75, entries: [{ week: 0, date: '2026-07-20', weight: 147.5 }] },
-    { id: 'benjamin', name: 'Benjamin', color: '#4A8FD4', initialWeight: 96.5, goalWeight: 86.85, entries: [{ week: 0, date: '2026-07-20', weight: 96.5 }] },
-    { id: 'daniel', name: 'Daniel', color: '#5BB85B', initialWeight: 109, goalWeight: 98.1, entries: [{ week: 0, date: '2026-07-20', weight: 109 }] }
+    { id: 'david',    name: 'David',    color: '#D4724A', avatar: '🏋️', initialWeight: 147.5, goalWeight: 132.75, entries: [{ week: 0, date: '2026-07-20', weight: 147.5 }] },
+    { id: 'benjamin', name: 'Benjamin', color: '#4A8FD4', avatar: '🚴', initialWeight: 96.5,  goalWeight: 86.85,  entries: [{ week: 0, date: '2026-07-20', weight: 96.5  }] },
+    { id: 'daniel',   name: 'Daniel',   color: '#5BB85B', avatar: '🤸', initialWeight: 109,   goalWeight: 98.1,   entries: [{ week: 0, date: '2026-07-20', weight: 109   }] }
   ]
 }
 
@@ -21,7 +21,13 @@ export default function App() {
   useEffect(() => {
     fetch('/api/weights')
       .then(r => r.json())
-      .then(d => setData(d))
+      .then(d => setData(prev => ({
+        ...d,
+        participants: d.participants.map(p => ({
+          ...p,
+          avatar: INITIAL_DATA.participants.find(ip => ip.id === p.id)?.avatar ?? '🦦',
+        })),
+      })))
       .catch(() => {})
   }, [])
 
@@ -54,6 +60,7 @@ export default function App() {
         currentWeek={getCurrentWeek()}
         onTitleClick={handleTitleClick}
         onRankingsToggle={() => setShowRankings(v => !v)}
+        onAdminToggle={() => setShowAdmin(v => !v)}
         showRankings={showRankings}
       />
       {showRankings && (
