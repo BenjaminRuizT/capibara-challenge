@@ -18,8 +18,17 @@ export default function AdminPanel({ participants, currentWeek, onSaved, onClose
   const [loading, setLoading] = useState(false)
 
   useEffect(() => {
-    setDate(weekToDate(week))
-  }, [week])
+    const p = participants.find(p => p.id === participantId)
+    const existing = p?.entries?.find(e => e.week === parseInt(week))
+    if (existing) {
+      setWeight(String(existing.weight))
+      setDate(existing.date)
+    } else {
+      setWeight('')
+      setDate(weekToDate(week))
+    }
+    setMsg(null)
+  }, [week, participantId])
 
   const handleSave = async (e) => {
     e.preventDefault()
@@ -43,8 +52,9 @@ export default function AdminPanel({ participants, currentWeek, onSaved, onClose
     setLoading(false)
   }
 
-  const selectedP = participants.find(p => p.id === participantId)
-  const getLatest = (p) => p?.entries?.[p.entries.length - 1]?.weight ?? p?.initialWeight
+  const selectedP   = participants.find(p => p.id === participantId)
+  const getLatest   = (p) => p?.entries?.[p.entries.length - 1]?.weight ?? p?.initialWeight
+  const hasExisting = selectedP?.entries?.some(e => e.week === parseInt(week))
 
   return (
     <div className="admin-overlay" onClick={onClose}>
@@ -63,9 +73,14 @@ export default function AdminPanel({ participants, currentWeek, onSaved, onClose
             <div className="admin-field">
               <label>Semana</label>
               <select value={week} onChange={e => setWeek(e.target.value)}>
-                {Array.from({ length: 10 }, (_, i) => (
-                  <option key={i} value={i}>Semana {i}{i === 0 ? ' (inicio)' : ''}</option>
-                ))}
+                {Array.from({ length: 10 }, (_, i) => {
+                  const tiene = selectedP?.entries?.some(e => e.week === i)
+                  return (
+                    <option key={i} value={i}>
+                      Semana {i}{i === 0 ? ' (inicio)' : ''}{tiene ? ' ✓' : ''}
+                    </option>
+                  )
+                })}
               </select>
             </div>
             <div className="admin-field">
@@ -97,7 +112,7 @@ export default function AdminPanel({ participants, currentWeek, onSaved, onClose
           {msg && <div className={`admin-msg ${msg.type}`}>{msg.text}</div>}
           <div className="admin-btns">
             <button type="submit" className="btn-save" disabled={loading}>
-              {loading ? 'Guardando...' : '💾 Guardar Peso'}
+              {loading ? 'Guardando...' : hasExisting ? '✏️ Actualizar Peso' : '💾 Guardar Peso'}
             </button>
             <button type="button" className="btn-cancel" onClick={onClose}>Cancelar</button>
           </div>
