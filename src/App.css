@@ -161,25 +161,26 @@ body { font-family: 'Nunito', sans-serif; overflow: hidden; }
 .cards-row {
   position: absolute;
   bottom: 0; left: 0; right: 0;
-  height: 26%;
+  height: 32%;
   z-index: 20;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 16px;
   padding: 0 24px;
-  background: linear-gradient(0deg, rgba(0,15,45,0.9) 0%, rgba(0,15,45,0.55) 100%);
-  backdrop-filter: blur(6px);
+  background: linear-gradient(0deg, rgba(0,15,45,0.72) 0%, rgba(0,15,45,0.25) 100%);
+  backdrop-filter: blur(3px);
 }
 .participant-card {
   flex: 1;
   max-width: 290px;
-  background: rgba(10, 50, 110, 0.82);
-  border: 2px solid rgba(100, 180, 255, 0.4);
+  background: rgba(10, 50, 110, 0.52);
+  border: 1px solid rgba(100, 180, 255, 0.28);
   border-radius: 14px;
   padding: 10px 14px;
   color: white;
   transition: transform 0.3s, box-shadow 0.3s;
+  backdrop-filter: blur(8px);
 }
 .participant-card:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,0.5); }
 .participant-card.rank-1 { border-color: #FFD700; box-shadow: 0 0 10px rgba(255,215,0,0.35); }
@@ -209,6 +210,31 @@ body { font-family: 'Nunito', sans-serif; overflow: hidden; }
 }
 .card-progress-bar { height: 8px; background: rgba(255,255,255,0.12); border-radius: 4px; overflow: hidden; }
 .card-progress-fill { height: 100%; border-radius: 4px; transition: width 1.2s ease; }
+
+/* ===== WEEKLY MINI CHART ===== */
+.card-weekly-chart {
+  display: flex; gap: 3px; align-items: flex-end;
+  margin-top: 8px; padding-top: 6px;
+  border-top: 1px solid rgba(255,255,255,0.08);
+}
+.chart-bar-col {
+  flex: 1; display: flex; flex-direction: column; align-items: center; gap: 2px;
+}
+.chart-bar-wrap {
+  height: 28px; display: flex; align-items: flex-end; width: 100%;
+  justify-content: center;
+}
+.chart-bar {
+  width: 100%; max-width: 14px; border-radius: 2px 2px 0 0;
+  transition: height 0.6s ease;
+}
+.chart-bar-empty {
+  width: 100%; max-width: 14px; height: 2px;
+  background: rgba(255,255,255,0.1); border-radius: 2px;
+}
+.chart-label {
+  font-size: 8px; opacity: 0.45; font-family: 'Nunito', sans-serif;
+}
 
 /* ===== TOP BUTTONS ===== */
 .rankings-btn {

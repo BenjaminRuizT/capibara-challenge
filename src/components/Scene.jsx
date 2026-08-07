@@ -369,6 +369,33 @@ export default function Scene({ participants, currentWeek, onTitleClick, onRanki
                 <div className="card-progress-fill"
                   style={{ width: `${progress}%`, background: `linear-gradient(90deg, ${p.color}, #5EFF99)` }} />
               </div>
+              {/* Weekly mini chart */}
+              {p.entries?.length > 0 && (
+                <div className="card-weekly-chart">
+                  {Array.from({ length: 10 }, (_, week) => {
+                    const entry = p.entries.find(e => e.week === week)
+                    const lostW = entry ? Math.max(p.initialWeight - entry.weight, 0) : null
+                    const barH  = lostW !== null ? Math.min((lostW / (p.initialWeight * 0.1)) * 28, 28) : 0
+                    const isCurrent = entry && week === p.entries[p.entries.length - 1].week
+                    return (
+                      <div key={week} className="chart-bar-col">
+                        <div className="chart-bar-wrap">
+                          {entry ? (
+                            <div className="chart-bar" style={{
+                              height: Math.max(barH, 2),
+                              background: isCurrent ? p.color : `${p.color}77`,
+                              boxShadow: isCurrent ? `0 0 5px ${p.color}` : 'none',
+                            }} />
+                          ) : (
+                            <div className="chart-bar-empty" />
+                          )}
+                        </div>
+                        <div className="chart-label">{week}</div>
+                      </div>
+                    )
+                  })}
+                </div>
+              )}
             </div>
           )
         })}
