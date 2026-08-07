@@ -169,7 +169,7 @@ function Moon() {
 
 /* ─── Weekly Weight Chart (SVG line chart) ────────────────── */
 function WeightLineChart({ entries, initialWeight, goalWeight, color }) {
-  const W = 260, H = 72
+  const W = 310, H = 88
   const PAD = { t: 18, b: 16, l: 6, r: 6 }
   const cW = W - PAD.l - PAD.r
   const cH = H - PAD.t - PAD.b
@@ -417,7 +417,7 @@ export default function Scene({ participants, currentWeek, onTitleClick, onAdmin
             return (
               <div key={p.id} className={`participant-card rank-${i + 1}`}>
                 <div className="card-header">
-                  <Avatar id={p.id} avatar={p.avatar} color={p.color} size={34} border />
+                  <Avatar id={p.id} avatar={p.avatar} color={p.color} size={60} border />
                   <span className="card-name">{p.name}</span>
                   <span className="card-rank">{medals[i]}</span>
                   <div style={{ marginLeft: 'auto', textAlign: 'right' }}>
@@ -456,8 +456,6 @@ export default function Scene({ participants, currentWeek, onTitleClick, onAdmin
         </div>
       </div>
 
-      {/* Action buttons */}
-      <button className="register-btn" onClick={onAdminToggle}>✏️ Registrar Peso</button>
       <div className="week-counter">📅 Semana {currentWeek} · {9 - currentWeek} sem restantes</div>
     </div>
   )
