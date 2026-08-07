@@ -16,26 +16,18 @@ const TIME_OVERLAYS = {
   night:     { bg: 'rgba(5, 10, 55, 0.72)',      filter: 'brightness(0.45) saturate(0.5)' },
 }
 
-/* ─── Activity cycles per participant ─────────────────────── */
 const ACTIVITY_CYCLES = {
-  benjamin: ['🚴 Bicicleta',       '🤸 Yoga',         '🏃 Carrera'],
-  david:    ['🏋️ Pesas',          '🥊 Box',           '🧗 Escalada'],
-  daniel:   ['🤼 Anillas / Barra', '🏋️ Sentadillas', '🏊 Natación'],
+  benjamin: ['🚴 Bicicleta', '🤸 Yoga',         '🏃 Carrera'],
+  david:    ['🏋️ Pesas',    '🥊 Box',           '🧗 Escalada'],
+  daniel:   ['🤼 Anillas',  '🏋️ Sentadillas',  '🏊 Natación'],
 }
 
-/* ─── Positions over the background image (% of scene) ─────
-   Derived from visual inspection of CAPIBARAS.png:
-   - Benjamin (bike, left):      ~left 13%, top 56%
-   - David (barbell, center):    ~left 47%, top 36%
-   - Daniel (yoga/right):        ~left 77%, top 34%
-────────────────────────────────────────────────────────────── */
 const CAPYBARA_POSITIONS = [
   { id: 'benjamin', name: 'Benjamin', color: '#4A8FD4', left: '13%', top: '55%' },
   { id: 'david',    name: 'David',    color: '#D4724A', left: '47%', top: '33%' },
   { id: 'daniel',   name: 'Daniel',   color: '#5BB85B', left: '77%', top: '32%' },
 ]
 
-/* ─── Clouds ──────────────────────────────────────────────── */
 const CLOUDS = [
   { id: 1, top: '6%',  width: 110, dur: 30, delay: 0,   op: 0.82 },
   { id: 2, top: '12%', width: 80,  dur: 42, delay: -14, op: 0.70 },
@@ -44,7 +36,6 @@ const CLOUDS = [
   { id: 5, top: '9%',  width: 65,  dur: 34, delay: -22, op: 0.80 },
 ]
 
-/* ─── Leaves ──────────────────────────────────────────────── */
 const LEAVES = [
   { id: 1, left: '8%',  size: 18, dur: 9,  delay: 0,  color: '#5B8C32' },
   { id: 2, left: '22%', size: 14, dur: 12, delay: -3, color: '#3E7A1A' },
@@ -54,7 +45,6 @@ const LEAVES = [
   { id: 6, left: '92%', size: 12, dur: 8,  delay: -5, color: '#7AB82E' },
 ]
 
-/* ─── Stars (night only) ──────────────────────────────────── */
 const STARS = Array.from({ length: 50 }, (_, i) => ({
   id: i,
   left: `${5 + Math.random() * 90}%`,
@@ -67,8 +57,7 @@ const STARS = Array.from({ length: 50 }, (_, i) => ({
 /* ─── Sub-components ─────────────────────────────────────── */
 function Cloud({ top, width, dur, delay, op }) {
   return (
-    <svg className="cloud" width={width} height={width * 0.55}
-      viewBox="0 0 120 66"
+    <svg className="cloud" width={width} height={width * 0.55} viewBox="0 0 120 66"
       style={{ top, animationDuration: `${dur}s`, animationDelay: `${delay}s`, opacity: op }}>
       <ellipse cx="60" cy="50" rx="55" ry="22" fill="white" />
       <ellipse cx="40" cy="40" rx="30" ry="22" fill="white" />
@@ -98,27 +87,21 @@ function Leaf({ left, size, dur, delay, color }) {
   )
 }
 
-/* ─── Water shimmer overlays on the bg image ─────────────── */
 function WaterShimmer() {
   return (
     <>
-      {/* Stream (left side of image) */}
       <div style={{
         position: 'absolute', left: '2%', top: '62%', width: '22%', height: '8%',
         background: 'linear-gradient(90deg, transparent, rgba(100,200,255,0.18), transparent)',
-        borderRadius: '50%',
-        animation: 'waterShimmer 2s ease-in-out infinite',
+        borderRadius: '50%', animation: 'waterShimmer 2s ease-in-out infinite',
         pointerEvents: 'none', zIndex: 4,
       }} />
       <div style={{
         position: 'absolute', left: '4%', top: '65%', width: '18%', height: '5%',
         background: 'linear-gradient(90deg, transparent, rgba(150,220,255,0.22), transparent)',
-        borderRadius: '50%',
-        animation: 'waterShimmer 2.5s ease-in-out infinite',
-        animationDelay: '-1s',
-        pointerEvents: 'none', zIndex: 4,
+        borderRadius: '50%', animation: 'waterShimmer 2.5s ease-in-out infinite',
+        animationDelay: '-1s', pointerEvents: 'none', zIndex: 4,
       }} />
-      {/* Waterfall (right side) */}
       <div style={{
         position: 'absolute', right: '5%', top: '42%', width: '5%', height: '18%',
         background: 'linear-gradient(180deg, rgba(180,230,255,0.3), transparent)',
@@ -129,32 +112,25 @@ function WaterShimmer() {
   )
 }
 
-/* ─── Capybara activity badge ─────────────────────────────── */
 function CapybaraBadge({ participant, currentWeight, initialWeight, activityText, show }) {
   const lost = (initialWeight - currentWeight).toFixed(1)
   const pct  = (((initialWeight - currentWeight) / initialWeight) * 100).toFixed(1)
-
   return (
     <div className={`capybara-badge ${show ? 'badge-visible' : 'badge-hidden'}`}
       style={{ '--accent': participant.color }}>
       <div className="badge-avatar" style={{ background: participant.color }}>
         {participant.avatar ?? participant.name[0]}
       </div>
-      <div className="badge-name" style={{ color: participant.color }}>
-        {participant.name}
-      </div>
+      <div className="badge-name" style={{ color: participant.color }}>{participant.name}</div>
       <div className="badge-activity">{activityText}</div>
       <div className="badge-weight">
         <span className="badge-kg">{currentWeight} kg</span>
-        {parseFloat(lost) > 0 && (
-          <span className="badge-lost">▼ {lost} kg ({pct}%)</span>
-        )}
+        {parseFloat(lost) > 0 && <span className="badge-lost">▼ {lost} kg ({pct}%)</span>}
       </div>
     </div>
   )
 }
 
-/* ─── Moon ────────────────────────────────────────────────── */
 function Moon() {
   return (
     <div style={{
@@ -167,9 +143,107 @@ function Moon() {
   )
 }
 
+/* ─── Weekly Weight Chart (SVG line chart) ────────────────── */
+function WeightLineChart({ entries, initialWeight, goalWeight, color }) {
+  const W = 260, H = 72
+  const PAD = { t: 18, b: 16, l: 6, r: 6 }
+  const cW = W - PAD.l - PAD.r
+  const cH = H - PAD.t - PAD.b
+
+  const sorted = [...(entries || [])].sort((a, b) => a.week - b.week)
+  if (sorted.length === 0) return null
+
+  const allWeights = sorted.map(e => e.weight)
+  const maxW = Math.max(...allWeights, initialWeight) + 1
+  const minW = Math.max(Math.min(...allWeights, goalWeight) - 1, 0)
+  const range = maxW - minW || 1
+
+  const xOf = (week) => PAD.l + (week / 9) * cW
+  const yOf = (w)    => PAD.t + cH - ((w - minW) / range) * cH
+
+  const pts = sorted.map(e => ({ ...e, x: xOf(e.week), y: yOf(e.weight) }))
+
+  const linePath = pts.map((p, i) => `${i === 0 ? 'M' : 'L'}${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(' ')
+  const areaPath = pts.length > 1
+    ? `M${pts[0].x.toFixed(1)},${(PAD.t + cH).toFixed(1)} ` +
+      pts.map(p => `L${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(' ') +
+      ` L${pts[pts.length - 1].x.toFixed(1)},${(PAD.t + cH).toFixed(1)} Z`
+    : ''
+
+  const goalY = yOf(goalWeight)
+
+  return (
+    <svg width={W} height={H} style={{ display: 'block', overflow: 'visible' }}>
+      {/* Goal line */}
+      <line x1={PAD.l} y1={goalY} x2={W - PAD.r} y2={goalY}
+        stroke="#5EFF99" strokeWidth="1" strokeDasharray="4,3" opacity="0.5" />
+      <text x={W - PAD.r + 2} y={goalY + 3} fontSize="7" fill="#5EFF99" opacity="0.7">meta</text>
+
+      {/* Future weeks tick marks */}
+      {Array.from({ length: 10 }, (_, w) => {
+        const hasDatum = sorted.some(e => e.week === w)
+        if (hasDatum) return null
+        const x = xOf(w)
+        return (
+          <g key={w}>
+            <line x1={x} y1={PAD.t + cH - 3} x2={x} y2={PAD.t + cH}
+              stroke="rgba(255,255,255,0.2)" strokeWidth="1" />
+            <text x={x} y={H - 2} textAnchor="middle" fontSize="7" fill="rgba(255,255,255,0.25)">
+              {w}
+            </text>
+          </g>
+        )
+      })}
+
+      {/* Area fill */}
+      {areaPath && (
+        <path d={areaPath} fill={color} opacity="0.12" />
+      )}
+
+      {/* Line */}
+      {pts.length > 1 && (
+        <path d={linePath} fill="none" stroke={color} strokeWidth="2"
+          strokeLinecap="round" strokeLinejoin="round" />
+      )}
+
+      {/* Data points */}
+      {pts.map((p, i) => {
+        const prev   = pts[i - 1]
+        const isGain = prev && p.weight > prev.weight
+        const dotColor = i === 0 ? 'rgba(255,255,255,0.6)' : (isGain ? '#FF5B5B' : '#5EFF99')
+        const delta  = prev ? (prev.weight - p.weight).toFixed(1) : null
+        return (
+          <g key={p.week}>
+            {/* Weight label above dot */}
+            <text x={p.x} y={p.y - 7} textAnchor="middle" fontSize="8"
+              fill="white" fontWeight="700" style={{ textShadow: '0 1px 3px black' }}>
+              {p.weight}
+            </text>
+            {/* Delta vs previous week */}
+            {delta !== null && (
+              <text x={p.x} y={p.y - 16} textAnchor="middle" fontSize="7"
+                fill={isGain ? '#FF5B5B' : '#5EFF99'}>
+                {isGain ? `+${Math.abs(delta)}` : `-${Math.abs(delta)}`}
+              </text>
+            )}
+            {/* Dot */}
+            <circle cx={p.x} cy={p.y} r={i === pts.length - 1 ? 5 : 3.5}
+              fill={dotColor} stroke="rgba(0,0,0,0.6)" strokeWidth="1.2" />
+            {/* Week label below */}
+            <text x={p.x} y={H - 2} textAnchor="middle" fontSize="7"
+              fill={i === pts.length - 1 ? '#FFE566' : 'rgba(255,255,255,0.55)'}>
+              S{p.week}
+            </text>
+          </g>
+        )
+      })}
+    </svg>
+  )
+}
+
 /* ─── Main Scene ──────────────────────────────────────────── */
-export default function Scene({ participants, currentWeek, onTitleClick, onRankingsToggle, onAdminToggle }) {
-  const [timeOfDay, setTimeOfDay]   = useState(getTimeOfDay)
+export default function Scene({ participants, currentWeek, onTitleClick, onAdminToggle }) {
+  const [timeOfDay, setTimeOfDay]     = useState(getTimeOfDay)
   const [activityIdx, setActivityIdx] = useState(0)
   const [badgeVisible, setBadgeVisible] = useState(true)
 
@@ -181,90 +255,69 @@ export default function Scene({ participants, currentWeek, onTitleClick, onRanki
   useEffect(() => {
     const interval = setInterval(() => {
       setBadgeVisible(false)
-      setTimeout(() => {
-        setActivityIdx(i => i + 1)
-        setBadgeVisible(true)
-      }, 500)
+      setTimeout(() => { setActivityIdx(i => i + 1); setBadgeVisible(true) }, 500)
     }, 20_000)
     return () => clearInterval(interval)
   }, [])
 
-  const overlay = TIME_OVERLAYS[timeOfDay]
-  const isNight = timeOfDay === 'night'
-  const showClouds = timeOfDay !== 'night'
-  const showBirds  = timeOfDay !== 'night'
+  const overlay  = TIME_OVERLAYS[timeOfDay]
+  const isNight  = timeOfDay === 'night'
 
   const getLatestWeight = (p) => {
     if (!p?.entries?.length) return p?.initialWeight ?? 0
     return p.entries[p.entries.length - 1].weight
   }
-
   const getActivity = (id) => {
     const cycle = ACTIVITY_CYCLES[id] ?? ['🏋️ Ejercicio']
     return cycle[activityIdx % cycle.length]
   }
-
   const getLost = (p) => (p.initialWeight - getLatestWeight(p)).toFixed(1)
   const getPct  = (p) => (((p.initialWeight - getLatestWeight(p)) / p.initialWeight) * 100).toFixed(1)
 
-  const ranked = [...participants].sort((a, b) =>
-    parseFloat(getPct(b)) - parseFloat(getPct(a))
-  )
+  const ranked = [...participants].sort((a, b) => parseFloat(getPct(b)) - parseFloat(getPct(a)))
   const medals = ['🥇', '🥈', '🥉']
 
   return (
     <div className={`scene ${timeOfDay}`}>
 
-      {/* ── Background Image ────────────────────────────── */}
+      {/* Background */}
       <div style={{
         position: 'absolute', inset: 0,
         backgroundImage: 'url(/capibara-bg.png)',
-        backgroundSize: 'cover',
-        backgroundPosition: 'center top',
-        backgroundRepeat: 'no-repeat',
-        filter: overlay.filter,
-        transition: 'filter 4s ease',
-        zIndex: 0,
+        backgroundSize: 'cover', backgroundPosition: 'center top',
+        filter: overlay.filter, transition: 'filter 4s ease', zIndex: 0,
       }} />
 
-      {/* ── Day / Night color overlay ──────────────────── */}
+      {/* Day/Night overlay */}
       <div style={{
-        position: 'absolute', inset: 0,
-        background: overlay.bg,
-        transition: 'background 4s ease',
-        zIndex: 1, pointerEvents: 'none',
+        position: 'absolute', inset: 0, background: overlay.bg,
+        transition: 'background 4s ease', zIndex: 1, pointerEvents: 'none',
         mixBlendMode: isNight ? 'multiply' : 'normal',
       }} />
 
-      {/* ── Night: stars + moon ────────────────────────── */}
       {isNight && (
         <>
           <Moon />
           <div style={{ position: 'absolute', inset: 0, zIndex: 2, pointerEvents: 'none' }}>
             {STARS.map(s => (
               <div key={s.id} className="star" style={{
-                left: s.left, top: s.top,
-                width: s.size, height: s.size,
-                animationDuration: `${s.dur}s`,
-                animationDelay: `${s.del}s`,
+                left: s.left, top: s.top, width: s.size, height: s.size,
+                animationDuration: `${s.dur}s`, animationDelay: `${s.del}s`,
               }} />
             ))}
           </div>
         </>
       )}
 
-      {/* ── Water shimmer ──────────────────────────────── */}
       <WaterShimmer />
 
-      {/* ── Clouds ────────────────────────────────────── */}
-      {showClouds && (
+      {timeOfDay !== 'night' && (
         <div className="clouds" style={{ zIndex: 5 }}>
           {CLOUDS.map(c => <Cloud key={c.id} {...c} />)}
         </div>
       )}
 
-      {/* ── Birds ─────────────────────────────────────── */}
-      {showBirds && (
+      {timeOfDay !== 'night' && (
         <div className="birds-layer" style={{ zIndex: 6 }}>
           {[
             { top: '8%',  delay: 0,   dur: 24, scale: 0.85 },
@@ -276,28 +329,22 @@ export default function Scene({ participants, currentWeek, onTitleClick, onRanki
         </div>
       )}
 
-      {/* ── Falling Leaves ────────────────────────────── */}
       <div className="leaves-layer" style={{ zIndex: 7 }}>
         {LEAVES.map(l => <Leaf key={l.id} {...l} />)}
       </div>
 
-      {/* ── Capybara Badges ────────────────────────────
-          Positioned over each capybara in the bg image  */}
+      {/* Capybara badges */}
       {CAPYBARA_POSITIONS.map(pos => {
         const participant = participants.find(p => p.id === pos.id)
         if (!participant) return null
-        const currentWeight = getLatestWeight(participant)
         return (
           <div key={pos.id} style={{
-            position: 'absolute',
-            left: pos.left,
-            top: pos.top,
-            transform: 'translate(-50%, -100%)',
-            zIndex: 12,
+            position: 'absolute', left: pos.left, top: pos.top,
+            transform: 'translate(-50%, -100%)', zIndex: 12,
           }}>
             <CapybaraBadge
-              participant={pos}
-              currentWeight={currentWeight}
+              participant={{ ...pos, avatar: participant.avatar }}
+              currentWeight={getLatestWeight(participant)}
               initialWeight={participant.initialWeight}
               activityText={getActivity(pos.id)}
               show={badgeVisible}
@@ -306,7 +353,7 @@ export default function Scene({ participants, currentWeek, onTitleClick, onRanki
         )
       })}
 
-      {/* ── Title Sign ────────────────────────────────── */}
+      {/* Title sign */}
       <div className="title-sign" onClick={onTitleClick} style={{ zIndex: 18 }}>
         <svg width="320" height="80" viewBox="0 0 320 80">
           <rect x="8" y="8" width="304" height="64" fill="#5a2e0a" rx="6" />
@@ -318,15 +365,13 @@ export default function Scene({ participants, currentWeek, onTitleClick, onRanki
           {[[18,14],[302,14],[18,66],[302,66]].map(([x,y],i) => (
             <circle key={i} cx={x} cy={y} r="4" fill="#3a1a05" />
           ))}
-          <text x="160" y="30" textAnchor="middle"
-            fontFamily="Fredoka One, cursive" fontSize="20"
-            fill="#FFE566"
+          <text x="160" y="30" textAnchor="middle" fontFamily="Fredoka One, cursive"
+            fontSize="20" fill="#FFE566"
             style={{ filter: 'drop-shadow(1px 1px 3px rgba(0,0,0,0.9))' }}>
             CAPIBARA'S
           </text>
-          <text x="160" y="60" textAnchor="middle"
-            fontFamily="Fredoka One, cursive" fontSize="26"
-            fill="#FFE566"
+          <text x="160" y="60" textAnchor="middle" fontFamily="Fredoka One, cursive"
+            fontSize="26" fill="#FFE566"
             style={{ filter: 'drop-shadow(1px 1px 3px rgba(0,0,0,0.9))' }}>
             CHALLENGE 🦦
           </text>
@@ -336,101 +381,61 @@ export default function Scene({ participants, currentWeek, onTitleClick, onRanki
         </div>
       </div>
 
-      {/* ── Participant Cards (bottom strip) ──────────── */}
+      {/* ── Ranking panel — siempre visible ───────────── */}
       <div className="cards-row">
-        {ranked.map((p, i) => {
-          const latest   = getLatestWeight(p)
-          const lost     = parseFloat(getLost(p))
-          const pct      = parseFloat(getPct(p))
-          const progress = Math.min((pct / 10) * 100, 100)
-          return (
-            <div key={p.id} className={`participant-card rank-${i + 1}`}>
-              <div className="card-header">
-                <div className="card-avatar" style={{ background: p.color }}>
-                  {p.avatar ?? p.name[0]}
+        <div className="ranking-header">🏆 Ranking — Semana {currentWeek} / 9</div>
+        <div className="cards-inner">
+          {ranked.map((p, i) => {
+            const latest   = getLatestWeight(p)
+            const lost     = parseFloat(getLost(p))
+            const pct      = parseFloat(getPct(p))
+            const progress = Math.min((pct / 10) * 100, 100)
+            return (
+              <div key={p.id} className={`participant-card rank-${i + 1}`}>
+                <div className="card-header">
+                  <div className="card-avatar" style={{ background: p.color }}>
+                    {p.avatar ?? p.name[0]}
+                  </div>
+                  <span className="card-name">{p.name}</span>
+                  <span className="card-rank">{medals[i]}</span>
+                  <div style={{ marginLeft: 'auto', textAlign: 'right' }}>
+                    <div style={{ display: 'flex', alignItems: 'baseline', gap: 3, justifyContent: 'flex-end' }}>
+                      <span className="card-current-weight">{latest}</span>
+                      <span className="card-weight-unit">kg</span>
+                    </div>
+                    <div className="card-lost">
+                      {lost > 0 ? `▼ ${lost} kg (${pct}%)` : '🏁 Inicio'}
+                    </div>
+                  </div>
                 </div>
-                <span className="card-name">{p.name}</span>
-                <span className="card-rank">{medals[i]}</span>
-              </div>
-              <div className="card-weights">
-                <div>
-                  <span className="card-current-weight">{latest}</span>
-                  <span className="card-weight-unit"> kg</span>
-                </div>
-                <div className="card-lost">
-                  {lost > 0 ? `▼ ${lost} kg` : '🏁 Inicio'}
-                </div>
-              </div>
-              <div className="card-progress-label">
-                <span>Progreso al 10%</span>
-                <span>{pct}%</span>
-              </div>
-              <div className="card-progress-bar">
-                <div className="card-progress-fill"
-                  style={{ width: `${progress}%`, background: `linear-gradient(90deg, ${p.color}, #5EFF99)` }} />
-              </div>
-              {/* Weekly trend chart */}
-              {p.entries?.length > 0 && (
-                <div className="card-weekly-chart">
-                  {Array.from({ length: 10 }, (_, week) => {
-                    const entry    = p.entries.find(e => e.week === week)
-                    const prevEntry = p.entries.find(e => e.week === week - 1)
-                    const isLast   = entry && week === p.entries[p.entries.length - 1].week
-                    let delta = null
-                    let barColor = 'rgba(255,255,255,0.15)'
-                    let barH = 2
-                    let isGain = false
 
-                    if (entry) {
-                      if (prevEntry) {
-                        delta = prevEntry.weight - entry.weight
-                        isGain = delta < 0
-                        const absD = Math.abs(delta)
-                        barH = Math.min(absD * 6, 28)
-                        barColor = isGain ? '#FF5B5B' : '#5EFF99'
-                      } else {
-                        barH = 4
-                        barColor = 'rgba(255,255,255,0.3)'
-                      }
-                    }
-
-                    return (
-                      <div key={week} className="chart-bar-col" title={
-                        entry ? (delta !== null ? `S${week}: ${delta > 0 ? '▼' : '▲'} ${Math.abs(delta).toFixed(1)} kg` : `S${week}: inicio`) : `S${week}: sin dato`
-                      }>
-                        <div className="chart-delta-label">
-                          {delta !== null && Math.abs(delta) >= 0.1 && (
-                            <span style={{ color: isGain ? '#FF5B5B' : '#5EFF99', fontSize: 7 }}>
-                              {isGain ? '▲' : '▼'}{Math.abs(delta).toFixed(1)}
-                            </span>
-                          )}
-                        </div>
-                        <div className="chart-bar-wrap">
-                          <div className="chart-bar" style={{
-                            height: Math.max(barH, 2),
-                            background: barColor,
-                            boxShadow: isLast ? `0 0 5px ${barColor}` : 'none',
-                            opacity: entry ? 1 : 0.25,
-                          }} />
-                        </div>
-                        <div className="chart-label" style={{ color: isLast ? '#FFE566' : undefined }}>
-                          {week}
-                        </div>
-                      </div>
-                    )
-                  })}
+                {/* Progress toward 10% goal */}
+                <div className="card-progress-label">
+                  <span>Meta 10%</span>
+                  <span>{pct}% {pct >= 10 ? '✅' : `· faltan ${(p.initialWeight * 0.1 - lost).toFixed(1)} kg`}</span>
                 </div>
-              )}
-            </div>
-          )
-        })}
+                <div className="card-progress-bar">
+                  <div className="card-progress-fill"
+                    style={{ width: `${progress}%`, background: `linear-gradient(90deg, ${p.color}, #5EFF99)` }} />
+                </div>
+
+                {/* Weekly line chart */}
+                <div className="card-chart-wrap">
+                  <WeightLineChart
+                    entries={p.entries}
+                    initialWeight={p.initialWeight}
+                    goalWeight={p.goalWeight}
+                    color={p.color}
+                  />
+                </div>
+              </div>
+            )
+          })}
+        </div>
       </div>
 
-      {/* ── Top Buttons ────────────────────────────────── */}
-      <div style={{ position: 'absolute', top: 14, left: 18, zIndex: 25, display: 'flex', flexDirection: 'column', gap: 8 }}>
-        <button className="rankings-btn" onClick={onRankingsToggle}>🏆 Ranking</button>
-        <button className="register-btn" onClick={onAdminToggle}>✏️ Registrar Peso</button>
-      </div>
+      {/* Action buttons */}
+      <button className="register-btn" onClick={onAdminToggle}>✏️ Registrar Peso</button>
       <div className="week-counter">📅 Semana {currentWeek} · {9 - currentWeek} sem restantes</div>
     </div>
   )

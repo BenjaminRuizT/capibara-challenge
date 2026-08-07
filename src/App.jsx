@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react'
 import Scene from './components/Scene'
-import Rankings from './components/Rankings'
 import AdminPanel from './components/AdminPanel'
 
 const INITIAL_DATA = {
@@ -13,21 +12,20 @@ const INITIAL_DATA = {
 }
 
 export default function App() {
-  const [data, setData] = useState(INITIAL_DATA)
+  const [data, setData]         = useState(INITIAL_DATA)
   const [showAdmin, setShowAdmin] = useState(false)
-  const [showRankings, setShowRankings] = useState(false)
   const [titleClicks, setTitleClicks] = useState(0)
 
   useEffect(() => {
     fetch('/api/weights')
       .then(r => r.json())
-      .then(d => setData(prev => ({
+      .then(d => setData({
         ...d,
         participants: d.participants.map(p => ({
           ...p,
           avatar: INITIAL_DATA.participants.find(ip => ip.id === p.id)?.avatar ?? '🦦',
         })),
-      })))
+      }))
       .catch(() => {})
   }, [])
 
@@ -42,14 +40,16 @@ export default function App() {
   const handleWeightSaved = (updated) => {
     setData(prev => ({
       ...prev,
-      participants: prev.participants.map(p => p.id === updated.id ? updated : p)
+      participants: prev.participants.map(p => p.id === updated.id ? {
+        ...updated,
+        avatar: INITIAL_DATA.participants.find(ip => ip.id === updated.id)?.avatar ?? '🦦',
+      } : p)
     }))
   }
 
   const getCurrentWeek = () => {
     const start = new Date('2026-07-20')
-    const now = new Date()
-    const diff = Math.floor((now - start) / (7 * 24 * 60 * 60 * 1000))
+    const diff  = Math.floor((new Date() - start) / (7 * 24 * 60 * 60 * 1000))
     return Math.max(0, Math.min(diff, 9))
   }
 
@@ -59,18 +59,8 @@ export default function App() {
         participants={data.participants}
         currentWeek={getCurrentWeek()}
         onTitleClick={handleTitleClick}
-        onRankingsToggle={() => setShowRankings(v => !v)}
         onAdminToggle={() => setShowAdmin(v => !v)}
-        showRankings={showRankings}
       />
-      {showRankings && (
-        <Rankings
-          participants={data.participants}
-          challenge={data.challenge}
-          currentWeek={getCurrentWeek()}
-          onClose={() => setShowRankings(false)}
-        />
-      )}
       {showAdmin && (
         <AdminPanel
           participants={data.participants}
