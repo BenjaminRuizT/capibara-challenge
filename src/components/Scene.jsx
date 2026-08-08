@@ -169,8 +169,8 @@ function Moon() {
 
 /* ─── Weekly Weight Chart (SVG line chart) ────────────────── */
 function WeightLineChart({ entries, initialWeight, goalWeight, color }) {
-  const W = 340, H = 100
-  const PAD = { t: 18, b: 16, l: 6, r: 6 }
+  const W = 340, H = 115
+  const PAD = { t: 24, b: 18, l: 6, r: 6 }
   const cW = W - PAD.l - PAD.r
   const cH = H - PAD.t - PAD.b
 
@@ -201,7 +201,7 @@ function WeightLineChart({ entries, initialWeight, goalWeight, color }) {
       {/* Goal line */}
       <line x1={PAD.l} y1={goalY} x2={W - PAD.r} y2={goalY}
         stroke="#5EFF99" strokeWidth="1" strokeDasharray="4,3" opacity="0.5" />
-      <text x={W - PAD.r + 2} y={goalY + 3} fontSize="7" fill="#5EFF99" opacity="0.7">meta</text>
+      <text x={W - PAD.r + 2} y={goalY + 3} fontSize="9" fill="#5EFF99" opacity="0.7">meta</text>
 
       {/* Future weeks tick marks */}
       {Array.from({ length: 10 }, (_, w) => {
@@ -212,7 +212,7 @@ function WeightLineChart({ entries, initialWeight, goalWeight, color }) {
           <g key={w}>
             <line x1={x} y1={PAD.t + cH - 3} x2={x} y2={PAD.t + cH}
               stroke="rgba(255,255,255,0.2)" strokeWidth="1" />
-            <text x={x} y={H - 2} textAnchor="middle" fontSize="7" fill="rgba(255,255,255,0.25)">
+            <text x={x} y={H - 2} textAnchor="middle" fontSize="8" fill="rgba(255,255,255,0.25)">
               {w}
             </text>
           </g>
@@ -239,13 +239,13 @@ function WeightLineChart({ entries, initialWeight, goalWeight, color }) {
         return (
           <g key={p.week}>
             {/* Weight label above dot */}
-            <text x={p.x} y={p.y - 7} textAnchor="middle" fontSize="8"
+            <text x={p.x} y={p.y - 9} textAnchor="middle" fontSize="11"
               fill="white" fontWeight="700" style={{ textShadow: '0 1px 3px black' }}>
               {p.weight}
             </text>
             {/* Delta vs previous week */}
             {delta !== null && (
-              <text x={p.x} y={p.y - 16} textAnchor="middle" fontSize="7"
+              <text x={p.x} y={p.y - 21} textAnchor="middle" fontSize="9"
                 fill={isGain ? '#FF5B5B' : '#5EFF99'}>
                 {isGain ? `+${Math.abs(delta)}` : `-${Math.abs(delta)}`}
               </text>
@@ -254,7 +254,7 @@ function WeightLineChart({ entries, initialWeight, goalWeight, color }) {
             <circle cx={p.x} cy={p.y} r={i === pts.length - 1 ? 5 : 3.5}
               fill={dotColor} stroke="rgba(0,0,0,0.6)" strokeWidth="1.2" />
             {/* Week label below */}
-            <text x={p.x} y={H - 2} textAnchor="middle" fontSize="7"
+            <text x={p.x} y={H - 2} textAnchor="middle" fontSize="9"
               fill={i === pts.length - 1 ? '#FFE566' : 'rgba(255,255,255,0.55)'}>
               S{p.week}
             </text>
