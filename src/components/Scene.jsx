@@ -443,6 +443,7 @@ export default function Scene({ participants, currentWeek, onTitleClick, onAdmin
       </div>
 
       <div className="week-counter">📅 Semana {currentWeek} · {9 - currentWeek} sem restantes</div>
+      <div className="version-badge">v{__APP_VERSION__}</div>
     </div>
   )
 }

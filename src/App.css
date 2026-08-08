@@ -258,6 +258,16 @@ body { font-family: 'Nunito', sans-serif; overflow: hidden; }
   backdrop-filter: blur(4px);
   box-shadow: 0 2px 8px rgba(0,0,0,0.4);
 }
+.version-badge {
+  position: absolute; bottom: 8px; left: 14px; z-index: 25;
+  background: rgba(0,0,0,0.38);
+  color: rgba(255,255,255,0.45);
+  border-radius: 8px;
+  padding: 3px 9px;
+  font-family: 'Nunito', sans-serif; font-size: 11px; font-weight: 700;
+  letter-spacing: 0.4px;
+  pointer-events: none;
+}
 
 /* ===== RANKINGS PANEL ===== */
 .rankings-overlay {
