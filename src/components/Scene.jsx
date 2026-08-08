@@ -388,7 +388,6 @@ export default function Scene({ participants, currentWeek, onTitleClick, onAdmin
 
       {/* ── Ranking panel — siempre visible ───────────── */}
       <div className="cards-row">
-        <div className="ranking-header">🏆 Ranking — Semana {currentWeek} / 9</div>
         <div className="cards-inner">
           {ranked.map((p, i) => {
             const latest   = getLatestWeight(p)
