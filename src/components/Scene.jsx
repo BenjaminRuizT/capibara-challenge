@@ -397,23 +397,23 @@ export default function Scene({ participants, currentWeek, onTitleClick, onAdmin
             const progress = Math.min((pct / 10) * 100, 100)
             return (
               <div key={p.id} className={`participant-card rank-${i + 1}`}>
-                {/* Avatar flotante centrado encima del cuadro */}
+                {/* Foto + nombre completamente fuera del cuadro, encima */}
                 <div className="card-avatar-float">
                   <Avatar id={p.id} avatar={p.avatar} color={p.color} size={164} border />
+                  <div className="card-name-badge">
+                    <span className="card-rank">{medals[i]}</span>
+                    <span className="card-name">{p.name}</span>
+                  </div>
                 </div>
-                <div className="card-header">
-                  <div style={{ flex: 1, textAlign: 'center' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
-                      <span className="card-name">{p.name}</span>
-                      <span className="card-rank">{medals[i]}</span>
-                    </div>
-                    <div style={{ display: 'flex', alignItems: 'baseline', gap: 4, justifyContent: 'center', marginTop: 2 }}>
-                      <span className="card-current-weight">{latest}</span>
-                      <span className="card-weight-unit">kg</span>
-                      <span className="card-lost">
-                        {lost > 0 ? `▼ ${lost} kg (${pct}%)` : '🏁 Inicio'}
-                      </span>
-                    </div>
+
+                {/* Solo datos dentro del cuadro */}
+                <div style={{ textAlign: 'center', marginBottom: 10 }}>
+                  <div style={{ display: 'flex', alignItems: 'baseline', gap: 5, justifyContent: 'center' }}>
+                    <span className="card-current-weight">{latest}</span>
+                    <span className="card-weight-unit">kg</span>
+                  </div>
+                  <div className="card-lost" style={{ marginTop: 2 }}>
+                    {lost > 0 ? `▼ ${lost} kg perdidos (${pct}%)` : '🏁 Peso inicial'}
                   </div>
                 </div>
 
