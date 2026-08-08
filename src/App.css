@@ -215,6 +215,20 @@ body { font-family: 'Nunito', sans-serif; overflow: hidden; }
   filter: drop-shadow(0 6px 16px rgba(0,0,0,0.6));
   z-index: 2;
 }
+.leader-crown {
+  position: absolute;
+  top: -34px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 34px;
+  z-index: 3;
+  filter: drop-shadow(0 2px 8px rgba(0,0,0,0.75));
+  animation: crownBob 2.2s ease-in-out infinite;
+}
+@keyframes crownBob {
+  0%, 100% { transform: translateX(-50%) translateY(0)   rotate(-6deg); }
+  50%       { transform: translateX(-50%) translateY(-5px) rotate(6deg); }
+}
 .card-name-badge {
   display: flex;
   align-items: center;

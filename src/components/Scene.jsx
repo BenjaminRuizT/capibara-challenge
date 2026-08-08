@@ -398,7 +398,10 @@ export default function Scene({ participants, currentWeek, onTitleClick, onAdmin
               <div key={p.id} className={`participant-card rank-${i + 1}`}>
                 {/* Foto + nombre completamente fuera del cuadro, encima */}
                 <div className="card-avatar-float">
-                  <Avatar id={p.id} avatar={p.avatar} color={p.color} size={164} border />
+                  <div style={{ position: 'relative', display: 'inline-block' }}>
+                    {i === 0 && <span className="leader-crown">👑</span>}
+                    <Avatar id={p.id} avatar={p.avatar} color={p.color} size={164} border />
+                  </div>
                   <div className="card-name-badge">
                     <span className="card-rank">{medals[i]}</span>
                     <span className="card-name">{p.name}</span>
