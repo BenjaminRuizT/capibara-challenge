@@ -67,8 +67,8 @@ function Avatar({ id, avatar, color, size = 32, border = false }) {
     <div style={{
       width: size, height: size, borderRadius: '50%',
       background: color, flexShrink: 0, overflow: 'hidden',
-      boxShadow: `0 2px 6px rgba(0,0,0,0.5)`,
-      border: border ? `2px solid rgba(255,255,255,0.4)` : 'none',
+      boxShadow: border ? `0 0 0 5px rgba(255,255,255,0.85), 0 6px 20px rgba(0,0,0,0.7)` : `0 2px 6px rgba(0,0,0,0.5)`,
+      border: border ? `3px solid rgba(255,255,255,0.95)` : 'none',
       display: 'flex', alignItems: 'center', justifyContent: 'center',
       fontSize: size * 0.55,
     }}>
