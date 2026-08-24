@@ -151,6 +151,12 @@ body { font-family: 'Nunito', sans-serif; overflow: hidden; }
   cursor: pointer;
   animation: signBob 3.5s ease-in-out infinite;
   filter: drop-shadow(0 4px 12px rgba(0,0,0,0.6));
+  width: min(90vw, 500px);
+}
+.title-sign-svg {
+  display: block;
+  width: 100%;
+  height: auto;
 }
 @keyframes signBob {
   0%, 100% { transform: translateX(-50%) rotate(-0.4deg); }
@@ -259,6 +265,11 @@ body { font-family: 'Nunito', sans-serif; overflow: hidden; }
   margin-top: 12px;
   padding-top: 8px;
   border-top: 1px solid rgba(255,255,255,0.09);
+}
+.weight-chart-svg {
+  width: 100%;
+  height: auto;
+  max-width: 340px;
 }
 
 /* ===== TOP BUTTONS ===== */
@@ -382,3 +393,76 @@ body { font-family: 'Nunito', sans-serif; overflow: hidden; }
 }
 .admin-msg.success { background: rgba(0,200,100,0.18); color: #5EFF99; }
 .admin-msg.error   { background: rgba(200,50,50,0.18);  color: #FF7070; }
+
+/* ===== RESPONSIVE ===== */
+
+/* Tablet: cards get tighter but stay in a row */
+@media (max-width: 1024px) {
+  .cards-inner { gap: 12px; }
+  .participant-card { padding: 16px 14px 14px; max-width: 320px; }
+  .card-current-weight { font-size: 24px; }
+  .card-name { font-size: 20px; }
+}
+
+/* Small tablet / large phone: stack cards vertically, scene grows & scrolls */
+@media (max-width: 860px) {
+  html, body { overflow: visible; }
+  .scene {
+    height: auto;
+    min-height: 100vh;
+    overflow: visible;
+    padding-bottom: 24px;
+  }
+
+  .title-sign { position: relative; top: 0; margin: 14px auto 0; }
+
+  .cards-row {
+    position: relative;
+    bottom: auto;
+    left: auto;
+    right: auto;
+    margin-top: 28px;
+    padding: 0 16px;
+  }
+  .cards-inner {
+    flex-direction: column;
+    align-items: center;
+    gap: 84px;
+  }
+  .participant-card {
+    width: 100%;
+    max-width: 420px;
+    margin-top: 96px;
+  }
+  .card-avatar-float { top: -96px; }
+  .card-avatar-img { width: 112px !important; height: 112px !important; }
+  .leader-crown { font-size: 28px; top: -28px; }
+  .card-name-badge { font-size: 19px; }
+
+  .week-counter {
+    position: relative;
+    top: auto; right: auto;
+    display: block;
+    width: fit-content;
+    margin: 10px auto 0;
+    font-size: 13px;
+  }
+  .version-badge { bottom: 6px; left: 8px; font-size: 10px; }
+}
+
+/* Phones */
+@media (max-width: 480px) {
+  .participant-card { padding: 14px 12px 12px; margin-top: 84px; }
+  .card-avatar-float { top: -84px; }
+  .card-avatar-img { width: 92px !important; height: 92px !important; }
+  .leader-crown { font-size: 22px; top: -22px; }
+  .card-name-badge { font-size: 17px; }
+  .card-current-weight { font-size: 24px; }
+  .card-weight-unit { font-size: 14px; }
+  .card-lost { font-size: 13px; }
+  .card-progress-label { font-size: 12px; }
+  .cards-inner { gap: 70px; }
+
+  .rankings-panel, .admin-panel { padding: 20px 18px; }
+  .rankings-title, .admin-title { font-size: 20px; }
+}
