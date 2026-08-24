@@ -61,10 +61,10 @@ const STARS = Array.from({ length: 50 }, (_, i) => ({
 }))
 
 /* ─── Avatar with photo ──────────────────────────────────── */
-function Avatar({ id, avatar, color, size = 32, border = false }) {
+function Avatar({ id, avatar, color, size = 32, border = false, className = '' }) {
   const photo = PHOTOS[id]
   return (
-    <div style={{
+    <div className={className} style={{
       width: size, height: size, borderRadius: '50%',
       background: color, flexShrink: 0, overflow: 'hidden',
       boxShadow: border ? `0 0 0 5px rgba(255,255,255,0.85), 0 6px 20px rgba(0,0,0,0.7)` : `0 2px 6px rgba(0,0,0,0.5)`,
@@ -197,7 +197,8 @@ function WeightLineChart({ entries, initialWeight, goalWeight, color }) {
   const goalY = yOf(goalWeight)
 
   return (
-    <svg width={W} height={H} style={{ display: 'block', overflow: 'visible' }}>
+    <svg width={W} height={H} viewBox={`0 0 ${W} ${H}`} className="weight-chart-svg"
+      style={{ display: 'block', overflow: 'visible' }}>
       {/* Goal line */}
       <line x1={PAD.l} y1={goalY} x2={W - PAD.r} y2={goalY}
         stroke="#5EFF99" strokeWidth="1" strokeDasharray="4,3" opacity="0.5" />
@@ -360,7 +361,7 @@ export default function Scene({ participants, currentWeek, onTitleClick, onAdmin
 
       {/* Title sign */}
       <div className="title-sign" onClick={onTitleClick} style={{ zIndex: 18 }}>
-        <svg width="500" height="124" viewBox="0 0 320 80">
+        <svg className="title-sign-svg" viewBox="0 0 320 80">
           <rect x="8" y="8" width="304" height="64" fill="#5a2e0a" rx="6" />
           <rect x="4" y="4" width="312" height="68" fill="#7B4520" rx="8" />
           {[16, 30, 44, 56].map(y => (
@@ -400,7 +401,7 @@ export default function Scene({ participants, currentWeek, onTitleClick, onAdmin
                 <div className="card-avatar-float">
                   <div style={{ position: 'relative', display: 'inline-block' }}>
                     {i === 0 && <span className="leader-crown">👑</span>}
-                    <Avatar id={p.id} avatar={p.avatar} color={p.color} size={164} border />
+                    <Avatar id={p.id} avatar={p.avatar} color={p.color} size={164} border className="card-avatar-img" />
                   </div>
                   <div className="card-name-badge">
                     <span className="card-rank">{medals[i]}</span>
