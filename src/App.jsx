@@ -1,9 +1,37 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Scene from './components/Scene'
 import AdminDashboard from './components/AdminDashboard'
 import LoginPage from './components/LoginPage'
 import EventHub from './components/EventHub'
 import DataEntry from './components/DataEntry'
+
+function UpdateBanner() {
+  const [show, setShow] = useState(false)
+  const dismissed = useRef(false)
+
+  useEffect(() => {
+    const check = async () => {
+      if (dismissed.current) return
+      try {
+        const r = await fetch('/api/version', { cache: 'no-store' })
+        const { version } = await r.json()
+        if (version && version !== __APP_VERSION__) setShow(true)
+      } catch {}
+    }
+    check()
+    const id = setInterval(check, 5 * 60 * 1000) // cada 5 min
+    return () => clearInterval(id)
+  }, [])
+
+  if (!show) return null
+  return (
+    <div className="update-banner">
+      <span>🚀 Nueva versión disponible</span>
+      <button className="update-banner-btn" onClick={() => window.location.reload()}>Actualizar</button>
+      <button className="update-banner-dismiss" onClick={() => { setShow(false); dismissed.current = true }}>✕</button>
+    </div>
+  )
+}
 
 const apiFetch = async (url, opts = {}) => {
   const token = localStorage.getItem('cc_token')
@@ -78,10 +106,10 @@ export default function App() {
     </div>
   )
 
-  if (view === 'login') return <LoginPage onLogin={handleLogin} />
+  if (view === 'login') return <><UpdateBanner /><LoginPage onLogin={handleLogin} /></>
 
   if (view === 'hub') return (
-    <EventHub auth={auth} onSelectEvent={handleSelectEvent} onLogout={handleLogout} api={apiFetch} />
+    <><UpdateBanner /><EventHub auth={auth} onSelectEvent={handleSelectEvent} onLogout={handleLogout} api={apiFetch} /></>
   )
 
   if (!data) return (
@@ -95,6 +123,7 @@ export default function App() {
 
   return (
     <div style={{ width: '100vw', height: '100dvh', position: 'relative', overflow: 'hidden' }}>
+      <UpdateBanner />
       <Scene
         participants={data.participants}
         challenge={data.challenge}

@@ -734,6 +734,9 @@ app.get('/api/events/:id/prize-pool', async (req, res) => {
   })
 })
 
+// ── Version ──────────────────────────────────────────────
+app.get('/api/version', (_, res) => res.json({ version: '3.0.0' }))
+
 // ── File upload ──────────────────────────────────────────
 app.post('/api/upload/photo',      upload.single('photo'),      (req, res) => { if (!req.file) return res.status(400).json({ error: 'No se recibió archivo' }); res.json({ url: `/uploads/${req.file.filename}` }) })
 app.post('/api/upload/background', upload.single('background'), (req, res) => { if (!req.file) return res.status(400).json({ error: 'No se recibió archivo' }); res.json({ url: `/uploads/${req.file.filename}` }) })
@@ -811,7 +814,10 @@ app.post('/api/participant', async (req, res) => {
 })
 
 // ── SPA fallback ─────────────────────────────────────────
-app.get('*', (_, res) => res.sendFile(join(__dirname, 'dist', 'index.html')))
+app.get('*', (_, res) => {
+  res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate')
+  res.sendFile(join(__dirname, 'dist', 'index.html'))
+})
 
 initDB()
   .then(() => app.listen(PORT, () => console.log(`Capibara Challenge v3.0.0 — puerto ${PORT}`)))
