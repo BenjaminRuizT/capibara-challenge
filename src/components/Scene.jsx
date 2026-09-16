@@ -358,7 +358,7 @@ function ParticipantCard({ p, rank, medals, goalPercent }) {
 }
 
 /* ─── Main Scene ──────────────────────────────────────────── */
-export default function Scene({ participants, challenge, currentWeek, settings = {}, onAdminToggle }) {
+export default function Scene({ participants, challenge, currentWeek, settings = {}, onAdminToggle, userRole, onBackToHub }) {
   const anim     = settings.animations || { clouds: true, birds: true, leaves: true, water: true }
   const goalPct  = challenge?.goalPercent || 10
   const totWeeks = challenge?.totalWeeks  || 9
@@ -518,7 +518,12 @@ export default function Scene({ participants, challenge, currentWeek, settings =
       </div>
 
       <div className="week-counter">📅 Sem {currentWeek} · {totWeeks - currentWeek} restantes</div>
-      <button className="admin-btn" onClick={onAdminToggle} title="Administrar">⚙</button>
+      {onBackToHub && <button className="back-hub-btn" onClick={onBackToHub}>← Eventos</button>}
+      {(userRole === 'admin' || userRole === 'participant') && (
+        <button className="admin-btn" onClick={onAdminToggle} title={userRole === 'admin' ? 'Administrar' : 'Registrar datos'}>
+          {userRole === 'admin' ? '⚙' : '📊'}
+        </button>
+      )}
       <button className="version-badge" onClick={() => setShowChangelog(true)} title="Ver historial de versiones">
         v{__APP_VERSION__}
       </button>
