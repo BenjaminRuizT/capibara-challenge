@@ -1,4 +1,76 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
+
+/* ─── Changelog ──────────────────────────────────────────── */
+const CHANGELOG = [
+  {
+    version: '2.0.0',
+    date: '2026-09-15',
+    emoji: '🚀',
+    changes: [
+      'Persistencia real en PostgreSQL (datos no se pierden)',
+      'Diseño responsive — carrusel en móvil',
+      'Panel admin con 3 tabs: Pesos, Visual, Evento & Salud',
+      'Botón ⚙ discreto reemplaza el truco de 5 clicks',
+      'Gráficas adaptables a cualquier tamaño de pantalla',
+      '5 fondos de pantalla + control de animaciones',
+      'Métricas de salud: IMC, déficit calórico, hidratación',
+    ],
+  },
+  {
+    version: '1.1.0',
+    date: '2026-08-07',
+    emoji: '👑',
+    changes: [
+      'Coronita animada sobre el líder',
+      'Fotos reales de los participantes',
+      'Gráfica de línea semanal con deltas',
+      'Letrero CAPIBARA\'S CHALLENGE en la parte superior',
+      'Overlay día/noche/tarde/mañana automático',
+    ],
+  },
+  {
+    version: '1.0.0',
+    date: '2026-07-20',
+    emoji: '🦦',
+    changes: [
+      'Lanzamiento inicial',
+      'Escena animada con nubes, pájaros y hojas',
+      'Ranking de participantes con fotos flotantes',
+      'Panel de admin con registro de pesos',
+      'Contador de semana y progreso hacia la meta',
+    ],
+  },
+]
+
+function ChangelogModal({ onClose }) {
+  return (
+    <div className="changelog-overlay" onClick={onClose}>
+      <div className="changelog-panel" onClick={e => e.stopPropagation()}>
+        <div className="changelog-header">
+          <span className="changelog-title">📋 Historial de Versiones</span>
+          <button className="changelog-close" onClick={onClose}>✕</button>
+        </div>
+        <div className="changelog-list">
+          {CHANGELOG.map((entry, i) => (
+            <div key={entry.version} className={`changelog-entry ${i === 0 ? 'latest' : ''}`}>
+              <div className="changelog-version-row">
+                <span className="changelog-emoji">{entry.emoji}</span>
+                <span className="changelog-version">v{entry.version}</span>
+                {i === 0 && <span className="changelog-current-badge">actual</span>}
+                <span className="changelog-date">{entry.date}</span>
+              </div>
+              <ul className="changelog-changes">
+                {entry.changes.map((c, j) => (
+                  <li key={j}>{c}</li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  )
+}
 
 /* ─── Time of Day ────────────────────────────────────────── */
 function getTimeOfDay() {
@@ -295,8 +367,9 @@ export default function Scene({ participants, challenge, currentWeek, settings =
     const mode = settings.timeMode
     return (mode && mode !== 'auto') ? mode : getTimeOfDay()
   })
-  const [activityIdx, setActivityIdx] = useState(0)
-  const [activeCard,  setActiveCard]  = useState(0)
+  const [activityIdx,    setActivityIdx]    = useState(0)
+  const [activeCard,     setActiveCard]     = useState(0)
+  const [showChangelog,  setShowChangelog]  = useState(false)
   const scrollRef = useRef(null)
 
   useEffect(() => {
@@ -446,7 +519,11 @@ export default function Scene({ participants, challenge, currentWeek, settings =
 
       <div className="week-counter">📅 Sem {currentWeek} · {totWeeks - currentWeek} restantes</div>
       <button className="admin-btn" onClick={onAdminToggle} title="Administrar">⚙</button>
-      <div className="version-badge">v{__APP_VERSION__}</div>
+      <button className="version-badge" onClick={() => setShowChangelog(true)} title="Ver historial de versiones">
+        v{__APP_VERSION__}
+      </button>
+
+      {showChangelog && <ChangelogModal onClose={() => setShowChangelog(false)} />}
     </div>
   )
 }
